@@ -1,6 +1,6 @@
-# zeebe-lambda-worker
+# Zero Scale Zeebe
 
-A Zeebe Worker for integration with Serverless (AWS / Azure Web Function / OpenWhisk).
+A Zeebe Worker for integration with Serverless (AWS / Azure Web Function / OpenWhisk). Allows you to run workers at zero-scale (nothing running when there is no work).
 
 This worker listens for configured tasks and invokes remote lambda functions via a REST POST.
 
