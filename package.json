@@ -1,0 +1,25 @@
+{
+  "name": "zeebe-lambda-worker",
+  "version": "1.0.0",
+  "description": "A Zeebe Worker for integration with Serverless (AWS / Azure Web Function / OpenWhisk)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwulf/zeebe-lambda-worker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwulf/zeebe-lambda-worker/issues"
+  },
+  "homepage": "https://github.com/jwulf/zeebe-lambda-worker#readme",
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.19.0",
+    "zeebe-node": "^2.2.0"
+  }
+}
