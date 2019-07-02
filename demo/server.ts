@@ -12,12 +12,12 @@ app.get("/", (req, res) => res.send("Hello World!"));
 
 app.post("/lambda1", (req, res) => {
   console.log(req.body);
-  res.json({ ok: true });
+  res.json({ lambda1Response: true });
 });
 
 app.post("/lambda2", (req, res) => {
   console.log(req.body);
-  res.json({ ok: true });
+  res.json({ lambda2Response: true });
 });
 
 app.listen(port, () =>

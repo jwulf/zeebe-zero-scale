@@ -1,6 +1,6 @@
 import { TaskMaster } from "./TaskMaster";
 const taskMapFileName = process.env.ZEEBE_TASK_MAP_FILE;
-const gatewayAddress = process.env.ZEEBE_GATEWAY_ADDRESS;
+const gatewayAddress = process.env.ZEEBE_GATEWAY_ADDRESS || "localhost";
 
 if (!taskMapFileName) {
   console.log("No value found for ZEEBE_TASK_MAP_FILE!");

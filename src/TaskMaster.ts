@@ -59,7 +59,7 @@ export class TaskMaster {
       worker: this.client.createWorker(taskType, taskType, (job, complete) => {
         axios
           .post(url, job)
-          .then(() => complete.success())
+          .then(({ data }) => complete.success(data))
           .catch(e => complete.failure(e));
       })
     };
