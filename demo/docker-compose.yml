@@ -14,37 +14,37 @@ services:
       - "26500:26500"
     networks:
       - zeebe_network
-    depends_on:
-      - localstack
-  lambaworker:
-    container_name: lambdaworker
-    image: sitapati/zeebe-lambda
-    environment:
-      - ZEEBE_GATEWAY_ADDRESS=zeebe:26500
-      - ZEEBE_TASK_MAP_FILE=/zeebe/taskmap.json
-    volumes:
-      - ./taskmap.json:/zeebe/taskmap.json
-    networks:
-      - zeebe_network
-    depends_on:
-      - zeebe
-  localstack:
-    image: localstack/localstack
-    ports:
-      - "4567-4584:4567-4584"
-      - "4592:4592"
-      - "8080:8080"
-    environment:
-      - SERVICES=serverless,cloudformation,sts
-      - LAMBDA_REMOTE_DOCKER=false
-      - DEBUG=1
-      #      - DATA_DIR=${DATA_DIR- }
-      - PORT_WEB_UI=8080
-      #      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
-      #      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
-      - DOCKER_HOST=unix:///var/run/docker.sock
-    volumes:
-      - "./.localstack:/tmp/localstack"
+    # depends_on:
+    #   - localstack
+#   lambaworker:
+#     container_name: lambdaworker
+#     image: sitapati/zeebe-lambda
+#     environment:
+#       - ZEEBE_GATEWAY_ADDRESS=zeebe:26500
+#       - ZEEBE_TASK_MAP_FILE=/zeebe/taskmap.json
+#     volumes:
+#       - ./taskmap.json:/zeebe/taskmap.json
+#     networks:
+#       - zeebe_network
+#     depends_on:
+#       - zeebe
+#   localstack:
+#     image: localstack/localstack
+#     ports:
+#       - "4567-4584:4567-4584"
+#       - "4592:4592"
+#       - "8080:8080"
+#     environment:
+#       - SERVICES=serverless,cloudformation,sts
+#       - LAMBDA_REMOTE_DOCKER=false
+#       - DEBUG=1
+#       #      - DATA_DIR=${DATA_DIR- }
+#       - PORT_WEB_UI=8080
+#       #      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+#       #      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+#       - DOCKER_HOST=unix:///var/run/docker.sock
+#     volumes:
+#       - "./.localstack:/tmp/localstack"
 
 
 

@@ -29,15 +29,15 @@ export class TaskMaster {
       return;
     }
     // Remove any workers that were removed in the task map
-    for (let taskType in Object.keys(this.workers)) {
+    Object.keys(this.workers).forEach(taskType => {
       if (!taskMap[taskType]) {
         console.log(`Removing worker for ${taskType}`);
         this.workers[taskType].worker.close();
         delete this.workers[taskType];
       }
-    }
+    });
     // Update or create
-    for (let taskType in Object.keys(taskMap)) {
+    Object.keys(taskMap).forEach(taskType => {
       const newUrl = taskMap[taskType];
       if (this.workers[taskType]) {
         const currentUrl = this.workers[taskType].url;
@@ -50,7 +50,7 @@ export class TaskMaster {
         console.log(`Creating new worker for ${taskType} at ${newUrl}`);
         this.createWorker(taskType, newUrl);
       }
-    }
+    });
   }
 
   createWorker(taskType: string, url: string) {
@@ -59,8 +59,8 @@ export class TaskMaster {
       worker: this.client.createWorker(taskType, taskType, (job, complete) => {
         axios
           .post(url, job)
-          .then(complete.success)
-          .catch(complete.failure);
+          .then(() => complete.success())
+          .catch(e => complete.failure(e));
       })
     };
   }

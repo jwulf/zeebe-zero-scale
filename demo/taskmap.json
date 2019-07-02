@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "test-task": "",
-    "test-task2": ""
+    "test-task": "http://localhost:3000/lambda1",
+    "test-task2": "http://localhost:3000/lambda2"
   }
 }

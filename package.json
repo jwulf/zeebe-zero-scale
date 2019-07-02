@@ -21,5 +21,11 @@
     "@types/axios": "^0.14.0",
     "axios": "^0.19.0",
     "zeebe-node": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.17.0",
+    "@types/express": "^4.17.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
   }
 }
