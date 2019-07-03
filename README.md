@@ -9,12 +9,12 @@ This worker loads up a JSON map of task types to config objects of this format:
 ```JSON
 {
   "tasks": {
-    "getUserTask": {
+    "test-task": {
       "url": "http://localhost:3000/getExample?foo=bar&baz=foo",
       "method": "get",
       "headers": { "Content-Type": "application/json" }
     },
-    "createPostTask": {
+    "test-task2": {
       "url": "http://localhost:3000/postExample",
       "method": "post",
       "headers": { "X-My-Custom-Header": "woopWoop" }
