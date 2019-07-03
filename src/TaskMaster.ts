@@ -1,9 +1,10 @@
 import axios from "axios";
 import { ZBClient, ZBWorker } from "zeebe-node";
+import hash from "object-hash";
 
 interface Workers {
   [taskType: string]: {
-    url: string;
+    hash: string;
     worker: ZBWorker<any, any, any>;
   };
 }
@@ -38,30 +39,41 @@ export class TaskMaster {
     });
     // Update or create
     Object.keys(taskMap).forEach(taskType => {
-      const newUrl = taskMap[taskType];
+      const { url, method, headers } = taskMap[taskType];
+      const newOptions = { url, method, headers };
       if (this.workers[taskType]) {
-        const currentUrl = this.workers[taskType].url;
-        if (currentUrl != newUrl) {
-          console.log(`Updating existing worker for ${taskType} to ${newUrl}`);
+        const currentHash = this.workers[taskType].hash;
+        if (currentHash != this.createHash(newOptions)) {
+          console.log(
+            `Updating existing worker for ${taskType} at ${newOptions.url}`
+          );
           this.workers[taskType].worker.close();
-          this.createWorker(taskType, newUrl);
+          this.createWorker(taskType, newOptions);
         }
       } else {
-        console.log(`Creating new worker for ${taskType} at ${newUrl}`);
-        this.createWorker(taskType, newUrl);
+        console.log(`Creating new worker for ${taskType} at ${newOptions.url}`);
+        this.createWorker(taskType, newOptions);
       }
     });
   }
 
-  createWorker(taskType: string, url: string) {
+  createHash({ url, method, headers }) {
+    return hash({ url, method, headers });
+  }
+
+  createWorker(taskType: string, { url, method, headers }) {
     this.workers[taskType] = {
-      url,
+      hash: this.createHash({ url, method, headers }),
       worker: this.client.createWorker(taskType, taskType, (job, complete) => {
-        axios
-          .post(url, job)
+        axios({
+          method: method,
+          url: url,
+          data: job.variables,
+          headers: headers,
+        })
           .then(({ data }) => complete.success(data))
           .catch(e => complete.failure(e));
-      })
+      }),
     };
   }
 }
