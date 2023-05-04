@@ -14,9 +14,9 @@ export class TaskMaster {
   workers: Workers;
   taskMapFilename: string;
 
-  constructor(taskMapFilename: string, gatewayAddress: string) {
+  constructor(taskMapFilename: string) {
     this.workers = {};
-    this.client = new ZBClient(gatewayAddress);
+    this.client = new ZBClient();
     this.taskMapFilename = taskMapFilename;
     this.loadTaskMap();
     setInterval(() => this.loadTaskMap(), 30000);
@@ -30,7 +30,7 @@ export class TaskMaster {
       return;
     }
     // Remove any workers that were removed in the task map
-    Object.keys(this.workers).forEach(taskType => {
+    Object.keys(this.workers).forEach((taskType) => {
       if (!taskMap[taskType]) {
         console.log(`Removing worker for ${taskType}`);
         this.workers[taskType].worker.close();
@@ -38,7 +38,7 @@ export class TaskMaster {
       }
     });
     // Update or create
-    Object.keys(taskMap).forEach(taskType => {
+    Object.keys(taskMap).forEach((taskType) => {
       const { url, method, headers } = taskMap[taskType];
       const newOptions = { url, method, headers };
       if (this.workers[taskType]) {
@@ -64,15 +64,17 @@ export class TaskMaster {
   createWorker(taskType: string, { url, method, headers }) {
     this.workers[taskType] = {
       hash: this.createHash({ url, method, headers }),
-      worker: this.client.createWorker(taskType, taskType, (job, complete) => {
-        axios({
-          method: method,
-          url: url,
-          data: job.variables,
-          headers: headers,
-        })
-          .then(({ data }) => complete.success(data))
-          .catch(e => complete.failure(e));
+      worker: this.client.createWorker({
+        taskType,
+        taskHandler: job =>
+          axios({
+            method,
+            url,
+            data: job.variables,
+            headers,
+          })
+            .then(({ data }) => job.complete(data))
+            .catch(e => job.fail(e)),
       }),
     };
   }

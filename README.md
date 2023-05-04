@@ -2,9 +2,13 @@
 
 A Zeebe Worker for integration with Serverless (AWS / Azure Web Function / OpenWhisk) or other JSON-based HTTP APIs. Allows you to run workers at zero-scale (nothing running when there is no work).
 
-This worker listens for configured tasks and invokes remote HTTP endpoints via GET or POST.
+OK, it's not zero scale, because you need this one worker running. But it is one worker for multiple task types - not one worker per-task type.
 
-This worker loads up a JSON map of task types to config objects of this format:
+This worker is configured via a JSON file containing a map of task types to REST endpoints.
+
+It polls for configured tasks and invokes remote HTTP endpoints via GET or POST.
+
+This configuration file looks like this:
 
 ```JSON
 {
@@ -26,9 +30,23 @@ This worker loads up a JSON map of task types to config objects of this format:
 
 The map is reloaded every 30 seconds, so the task type mapping can be updated.
 
-Set the environment variable `ZEEBE_TASK_MAP_FILE` to point to this map, and set the environment variable `ZEEBE_GATEWAY_ADDRESS` to point to the Zeebe gRPC gateway.
+## Usage
 
-Then run `node dst/index.js`
+Install dependencies: 
+
+```bash
+npm i
+```
+
+Build: 
+
+```bash 
+npm run build
+```
+
+Set the environment variable `ZEEBE_TASK_MAP_FILE` to point to your JSON map (there is an example in the `demo` subdirectory).
+
+Then run `npm start`
 
 ## Demo
 
@@ -58,19 +76,12 @@ ts-node server.ts
 - In Terminal 3 - Start the Zero-Scale worker:
 
 ```
-ZEEBE_TASK_MAP_FILE=../demo/taskmap.json ZEEBE_GATEWAY_ADDRESS=localhost:26500 ts-node src/index.ts
-```
-
-- In Terminal 4 - deploy the test workflow:
-
-```
-cd demo
-ts-node deploy.ts
+ZEEBE_TASK_MAP_FILE=../demo/taskmap.json ts-node src/index.ts
 ```
 
 - In Terminal 4 - start a workflow:
 
 ```
 cd demo
-ts-node start.ts
+ts-node start-work.ts
 ```
